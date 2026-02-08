@@ -29,7 +29,7 @@ export default function Comparison() {
         <div className="w-full sm:w-auto">
           <div className="rounded-md sm:rounded-lg md:rounded-xl border border-white/10 bg-white/5 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 backdrop-blur-md shadow-lg inline-block">
             <h4 className="text-white font-semibold tracking-wide text-sm sm:text-base">
-              Language to Language
+              Java to Python
             </h4>
           </div>
         </div>

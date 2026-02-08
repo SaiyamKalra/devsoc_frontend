@@ -18,8 +18,11 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060C1E] overflow-hidden relative">
-      <ParticlesBackground />
+    <div className="min-h-screen bg-[#060C1E] overflow-hidden">
+      {" "}
+      <div className="fixed inset-0 z-0 w-full h-full min-h-screen">
+        <ParticlesBackground />
+      </div>
       <div className="relative z-10">
         <div className="flex justify-center">
           <img

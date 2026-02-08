@@ -59,18 +59,19 @@ export default function ConvertFiles() {
   const convertEnabled = selected.size > 0;
 
   return (
-    <div className="min-h-screen bg-[#060C1E] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 text-white font-primary relative">
-      <ParticlesBackground />
-      <div className="relative z-10 flex flex-col">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3 text-lg font-semibold font-secondary">
-            <img src={Logo} alt="" className="h-9 w-9 shrink-0" />
-            <span>
-              <span className="text-[#10B981]">Shadow</span>Code
-            </span>
-          </div>
+    <div className="min-h-screen bg-[#060C1E] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 text-white font-primary">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="flex items-center gap-3 text-lg font-semibold font-secondary">
+          <img src={Logo} alt="" className="h-9 w-9 shrink-0" />
+          <span>
+            <span className="text-[#10B981]">Shadow</span>Code
+          </span>
+        </div>
+        <div className="fixed inset-0 z-0 w-full h-full min-h-screen pointer-events-none">
+          <ParticlesBackground />
+        </div>
 
-          <button
+        <button
           onClick={() => navigate("/conversion")}
           disabled={!convertEnabled}
           className={`px-8 py-2.5 rounded-md text-sm font-secondary transition self-start sm:self-auto ${
@@ -81,9 +82,9 @@ export default function ConvertFiles() {
         >
           Convert
         </button>
-        </div>
+      </div>
 
-        <div className="mt-6 flex flex-col sm:flex-row gap-4 rounded-xl border border-[#10B981]/30 bg-gradient-to-r from-[#0B1227] to-[#060C1E] p-5 sm:p-6">
+      <div className="mt-6 flex flex-col sm:flex-row gap-4 rounded-xl border border-[#10B981]/30 bg-gradient-to-r from-[#0B1227] to-[#060C1E] p-5 sm:p-6">
         <img src={ConvertFilesIcon} alt="" className="h-10 w-10 shrink-0" />
 
         <div className="flex-1">
@@ -99,8 +100,8 @@ export default function ConvertFiles() {
         </div>
       </div>
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {files.map((file) => {
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {files.map((file) => {
           const isSelected = selected.has(file.nodeId);
           const fileName = file.filePath.split("/").pop();
 
@@ -143,16 +144,15 @@ export default function ConvertFiles() {
             </div>
           );
         })}
-        </div>
+      </div>
 
-        <div className="mt-10">
-          <button
-            onClick={() => navigate("/map")}
-            className="px-6 py-2 rounded-md bg-[#10B981] text-black text-sm font-secondary hover:brightness-110 transition"
-          >
-            Go Back
-          </button>
-        </div>
+      <div className="mt-10">
+        <button
+          onClick={() => navigate("/map")}
+          className="px-6 py-2 rounded-md bg-[#10B981] text-black text-sm font-secondary hover:brightness-110 transition"
+        >
+          Go Back
+        </button>
       </div>
     </div>
   );

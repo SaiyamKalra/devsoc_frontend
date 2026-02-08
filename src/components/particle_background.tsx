@@ -14,52 +14,58 @@ export default function ParticlesBackground() {
   if (!init) return null;
 
   return (
-    <div className="absolute inset-0 w-full h-full min-h-screen">
+    <div
+      className="fixed inset-0 z-0 w-full h-full min-h-screen pointer-events-none"
+      aria-hidden
+    >
       <Particles
         id="tsparticles"
-        className="w-full h-full"
+        className="absolute inset-0 w-full h-full"
         options={{
           background: {
             color: {
               value: "transparent",
             },
           },
-          fpsLimit: 120,
+          fpsLimit: 60,
+          fullScreen: false,
           particles: {
             color: {
               value: "#10B981",
             },
             links: {
               color: "#10B981",
-              distance: 150,
+              distance: 140,
               enable: true,
-              opacity: 0.5,
-              width: 2,
+              opacity: 0.35,
+              width: 1,
             },
             move: {
-              direction: "none",
               enable: true,
+              speed: 0.8,
+              direction: "none",
+              random: true,
+              straight: false,
               outModes: {
                 default: "bounce",
               },
-              random: false,
-              speed: 1,
-              straight: false,
             },
             number: {
+              value: 60,
               density: {
                 enable: true,
+                width: 1920,
+                height: 1080,
               },
-              value: 80,
             },
             opacity: {
-              value: 0.5,
+              value: { min: 0.2, max: 0.6 },
             },
             shape: {
               type: "circle",
             },
             size: {
-              value: { min: 1, max: 5 },
+              value: { min: 1, max: 4 },
             },
           },
           detectRetina: true,

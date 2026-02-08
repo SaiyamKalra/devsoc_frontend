@@ -5,7 +5,9 @@ import ParticlesBackground from "./components/particle_background";
 
 export default function ConversionResult() {
   const navigate = useNavigate();
-
+  const handleNavigation = () => {
+    navigate("/comparison");
+  };
   return (
     <div className="min-h-screen bg-[#060C1E] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 text-white font-primary">
       <div className="flex items-center gap-3 text-lg font-semibold font-secondary">
@@ -121,7 +123,10 @@ export default function ConversionResult() {
           View Updated Map
         </button>
 
-        <button className="px-8 py-2.5 rounded-md bg-[#10B981] text-black text-sm font-secondary hover:brightness-110 transition">
+        <button
+          className="px-8 py-2.5 rounded-md bg-[#10B981] text-black text-sm font-secondary hover:brightness-110 transition"
+          onClick={handleNavigation}
+        >
           Review Conversion
         </button>
       </div>

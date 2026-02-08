@@ -240,6 +240,7 @@ const InteractiveGraph: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#060C1E] flex text-white relative">
       <ParticlesBackground />
+      <div className="relative z-10 flex flex-1 min-w-0">
       <aside className="w-[280px] border-r border-white/10 bg-gradient-to-b from-[#0B1227] to-[#060C1E] p-6">
         <div className="mb-8">
           <div className="flex items-center gap-3">
@@ -352,6 +353,7 @@ const InteractiveGraph: React.FC = () => {
           </button>
         </div>
       </main>
+      </div>
     </div>
   );
 };

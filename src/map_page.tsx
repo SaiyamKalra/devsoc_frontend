@@ -340,6 +340,14 @@ const InteractiveGraph: React.FC = () => {
             View Safe Files
           </button>
         </div>
+        <div className="absolute bottom-6 left-6">
+          <button
+            onClick={() => navigate("/")}
+            className="px-8 py-3 rounded-xl bg-[#10B981] text-black font-secondary hover:brightness-110 transition"
+          >
+            Go Back
+          </button>
+        </div>
       </main>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import ParticlesBackground from "./components/particle_background";
 
 /* ===================== TYPES ===================== */
 
@@ -55,6 +56,11 @@ const InteractiveGraph: React.FC = () => {
     { source: string; target: string; type: string }[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [tooltip, setTooltip] = useState<{
+    x: number;
+    y: number;
+    metrics: GraphNode["metrics"];
+  } | null>(null);
 
   /* ===================== LOAD DATA ===================== */
 
@@ -184,6 +190,35 @@ const InteractiveGraph: React.FC = () => {
       .attr("fill", "#E5E7EB")
       .attr("font-size", "10px");
 
+    node
+      .style("cursor", "pointer")
+      .on("mouseover", function (event: any, d: any) {
+        const nodeId = d.id;
+        link.attr("stroke-opacity", (l: any) =>
+          l.source.id === nodeId || l.target.id === nodeId ? 1 : 0.12,
+        );
+        node.style("opacity", (n: any) =>
+          n.id === nodeId ||
+          links.some(
+            (ln: { source: string; target: string }) =>
+              (ln.source === nodeId && ln.target === n.id) ||
+              (ln.target === nodeId && ln.source === n.id),
+          )
+            ? 1
+            : 0.25,
+        );
+        setTooltip({
+          x: event.clientX,
+          y: event.clientY,
+          metrics: d.metrics,
+        });
+      })
+      .on("mouseout", function () {
+        link.attr("stroke-opacity", 0.35);
+        node.style("opacity", 1);
+        setTooltip(null);
+      });
+
     simulation.on("tick", () => {
       link.attr("d", (d: any) => {
         const dx = d.target.x - d.source.x;
@@ -211,7 +246,8 @@ const InteractiveGraph: React.FC = () => {
   const safeFiles = nodes.filter((n) => n.classification === "GREEN").length;
 
   return (
-    <div className="min-h-screen bg-[#060C1E] flex text-white">
+    <div className="min-h-screen bg-[#060C1E] flex text-white relative">
+      <ParticlesBackground />
       {/* SIDEBAR */}
       <aside className="w-[280px] border-r border-white/10 bg-gradient-to-b from-[#0B1227] to-[#060C1E] p-6">
         <h1 className="text-xl font-bold text-[#10B981]">Risk Analysis Map</h1>
@@ -246,7 +282,7 @@ const InteractiveGraph: React.FC = () => {
       {/* MAIN */}
       <main className="flex-1 relative">
         {/* SEARCH */}
-        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 w-[420px]">
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 lg:w-[700px] md:w-[450px] sm:w-[300px]">
           <input
             placeholder="Search files"
             className="w-full rounded-xl bg-[#0B1227]/90 border border-white/10 px-10 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
@@ -257,6 +293,40 @@ const InteractiveGraph: React.FC = () => {
         <div className="h-full flex items-center justify-center">
           <svg ref={svgRef} className="w-full h-[600px]" />
         </div>
+
+        {/* NODE METRICS TOOLTIP */}
+        {tooltip && (
+          <div
+            className="fixed z-20 pointer-events-none rounded-lg border border-white/20 bg-[#0B1227]/95 px-4 py-3 text-sm shadow-xl backdrop-blur"
+            style={{
+              left: tooltip.x + 12,
+              top: tooltip.y + 12,
+            }}
+          >
+            <div className="space-y-1.5 font-medium text-gray-300">
+              <div className="flex justify-between gap-6">
+                <span className="text-gray-400">Fan In</span>
+                <span>{tooltip.metrics.fanIn}</span>
+              </div>
+              <div className="flex justify-between gap-6">
+                <span className="text-gray-400">Fan Out</span>
+                <span>{tooltip.metrics.fanOut}</span>
+              </div>
+              <div className="flex justify-between gap-6">
+                <span className="text-gray-400">Read from DB</span>
+                <span>{tooltip.metrics.readsFromDb ? "Yes" : "No"}</span>
+              </div>
+              <div className="flex justify-between gap-6">
+                <span className="text-gray-400">Write to DB</span>
+                <span>{tooltip.metrics.writesToDb ? "Yes" : "No"}</span>
+              </div>
+              <div className="flex justify-between gap-6">
+                <span className="text-gray-400">In Cycle</span>
+                <span>{tooltip.metrics.inCycle ? "Yes" : "No"}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="absolute bottom-6 right-6">

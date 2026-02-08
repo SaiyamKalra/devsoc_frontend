@@ -21,8 +21,8 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#060C1E] overflow-hidden">
       {" "}
       {/* ✅ Removed relative */}
-      {/* Particles - now with positive z-index */}
-      <div className="fixed inset-0 z-0">
+      {/* Particles - full viewport with explicit size so canvas renders */}
+      <div className="fixed inset-0 z-0 w-full h-full min-h-screen">
         <ParticlesBackground />
       </div>
       {/* Content */}

@@ -97,7 +97,7 @@ class AuthService:
         <div className="mt-auto pt-6 flex justify-start">
           <button
             type="button"
-            className="bg-[#10B981] font-medium px-4 py-2 rounded-lg hover:bg-[#0d9668] transition-colors cursor-pointer"
+            className="bg-[#10B981] font-medium px-4 py-2 rounded-lg hover:bg-[#0d9668] transition-colors cursor-pointer font-secondary"
             onClick={handleNavigation}
           >
             Go Back

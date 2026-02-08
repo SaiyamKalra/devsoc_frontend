@@ -62,7 +62,7 @@ export default function HomePage() {
             {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
 
             <button
-              className="mt-6 w-full rounded-lg bg-[#10B981] py-3 font-semibold text-black hover:bg-[#0ea472] transition"
+              className="mt-6 w-full rounded-lg bg-[#10B981] py-3 font-secondary text-black hover:bg-[#0ea472] transition"
               onClick={handleChange}
             >
               Convert Code

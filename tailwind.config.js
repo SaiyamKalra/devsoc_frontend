@@ -7,8 +7,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        secondary: ["Days One", "sans-serif"],
+        sans: ["Poppins", "sans-serif"],
         primary: ["Poppins", "sans-serif"],
+        heading: ["Days One", "sans-serif"],
+        secondary: ["Days One", "sans-serif"],
       },
     },
   },

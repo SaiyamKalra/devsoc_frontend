@@ -121,7 +121,6 @@ const InteractiveGraph: React.FC = () => {
         .on("zoom", (e) => g.attr("transform", e.transform)),
     );
 
-    /* ---------- SIMULATION ---------- */
     const simulation = d3
       .forceSimulation(nodes as any)
       .force(
@@ -135,7 +134,6 @@ const InteractiveGraph: React.FC = () => {
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide().radius(34));
 
-    /* ---------- CURVED LINKS ---------- */
     const link = g
       .append("g")
       .selectAll("path")
@@ -146,13 +144,11 @@ const InteractiveGraph: React.FC = () => {
       .attr("stroke-width", (d: any) => (d.type === "CALLS" ? 2.5 : 1.5))
       .attr("stroke-opacity", 0.35);
 
-    /* ---------- NODES ---------- */
     const node = g
       .append("g")
       .selectAll("g")
       .data(nodes)
       .join("g")
-      .attr("cursor", "pointer")
       .call(
         d3
           .drag<any, any>()
@@ -176,10 +172,9 @@ const InteractiveGraph: React.FC = () => {
       .append("circle")
       .attr("r", (d: any) => 14 + d.riskScore / 10)
       .attr("fill", (d: any) => nodeColor(d.classification))
-      .attr("stroke", "#0F172A")
+      .attr("stroke", "#020617")
       .attr("stroke-width", 2)
-      .style("filter", "drop-shadow(0 0 6px rgba(16,185,129,0.35))")
-      .attr("opacity", 0.9);
+      .style("filter", "drop-shadow(0 0 6px rgba(16,185,129,0.35))");
 
     node
       .append("text")
@@ -187,51 +182,13 @@ const InteractiveGraph: React.FC = () => {
       .attr("y", 24)
       .attr("text-anchor", "middle")
       .attr("fill", "#E5E7EB")
-      .attr("font-size", "10px")
-      .attr("pointer-events", "none");
+      .attr("font-size", "10px");
 
-    /* ---------- HOVER HIGHLIGHT ---------- */
-    node.on("mouseenter", function (_, d: any) {
-      const connected = new Set<string>([d.id]);
-
-      links.forEach((l: any) => {
-        const s = typeof l.source === "object" ? l.source.id : l.source;
-        const t = typeof l.target === "object" ? l.target.id : l.target;
-        if (s === d.id) connected.add(t);
-        if (t === d.id) connected.add(s);
-      });
-
-      node
-        .select("circle")
-        .attr("opacity", (n: any) => (connected.has(n.id) ? 1 : 0.2));
-
-      link
-        .attr("stroke-opacity", (l: any) => {
-          const s = typeof l.source === "object" ? l.source.id : l.source;
-          const t = typeof l.target === "object" ? l.target.id : l.target;
-          return s === d.id || t === d.id ? 0.9 : 0.05;
-        })
-        .attr("stroke-width", (l: any) => {
-          const s = typeof l.source === "object" ? l.source.id : l.source;
-          const t = typeof l.target === "object" ? l.target.id : l.target;
-          return s === d.id || t === d.id ? 3.5 : 1;
-        });
-    });
-
-    node.on("mouseleave", () => {
-      node.select("circle").attr("opacity", 0.9);
-      link
-        .attr("stroke-opacity", 0.35)
-        .attr("stroke-width", (d: any) => (d.type === "CALLS" ? 2.5 : 1.5));
-    });
-
-    /* ---------- TICK ---------- */
     simulation.on("tick", () => {
       link.attr("d", (d: any) => {
         const dx = d.target.x - d.source.x;
         const dy = d.target.y - d.source.y;
         const dr = Math.sqrt(dx * dx + dy * dy) * 1.5;
-
         return `M ${d.source.x},${d.source.y}
                 A ${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
       });
@@ -244,17 +201,70 @@ const InteractiveGraph: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#0B1525] flex items-center justify-center text-white">
+      <div className="min-h-screen bg-[#060C1E] flex items-center justify-center text-white">
         Loading graph…
       </div>
     );
   }
 
+  const totalFiles = nodes.length;
+  const safeFiles = nodes.filter((n) => n.classification === "GREEN").length;
+
   return (
-    <div className="min-h-screen bg-[#0B1525] p-6">
-      <div className="bg-[#0F1C2E] rounded-lg border border-gray-700">
-        <svg ref={svgRef} className="w-full h-[600px]" />
-      </div>
+    <div className="min-h-screen bg-[#060C1E] flex text-white">
+      {/* SIDEBAR */}
+      <aside className="w-[280px] border-r border-white/10 bg-gradient-to-b from-[#0B1227] to-[#060C1E] p-6">
+        <h1 className="text-xl font-bold text-[#10B981]">Risk Analysis Map</h1>
+        <p className="text-xs text-gray-400 mb-8">
+          github.com/username/repository
+        </p>
+
+        <div className="space-y-3 text-sm mb-8">
+          <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-[#10B981]" /> Safe
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-[#F59E0B]" /> Moderate
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-[#EF4444]" /> Risky
+          </div>
+        </div>
+
+        <div className="text-sm space-y-2">
+          <div className="flex justify-between">
+            <span className="text-gray-400">Total Files</span>
+            <span>{totalFiles}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-400">Safe to Convert</span>
+            <span className="text-[#10B981]">{safeFiles}</span>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN */}
+      <main className="flex-1 relative">
+        {/* SEARCH */}
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 w-[420px]">
+          <input
+            placeholder="Search files"
+            className="w-full rounded-xl bg-[#0B1227]/90 border border-white/10 px-10 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+          />
+        </div>
+
+        {/* GRAPH */}
+        <div className="h-full flex items-center justify-center">
+          <svg ref={svgRef} className="w-full h-[600px]" />
+        </div>
+
+        {/* CTA */}
+        <div className="absolute bottom-6 right-6">
+          <button className="px-6 py-3 rounded-xl bg-[#10B981] text-black font-semibold hover:bg-[#0ea472] transition">
+            View Safe Files
+          </button>
+        </div>
+      </main>
     </div>
   );
 };

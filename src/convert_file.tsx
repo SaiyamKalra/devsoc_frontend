@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 import ConvertFilesIcon from "./assets/convertfiles.svg";
 import FileIcon from "./assets/fileicon.svg";
+import Logo from "./assets/logo.svg";
+import ParticlesBackground from "./components/particle_background";
 
 interface FileNode {
   nodeId: string;
@@ -59,11 +61,18 @@ export default function ConvertFiles() {
   return (
     <div className="min-h-screen bg-[#060C1E] px-4 sm:px-6 lg:px-10 py-6 sm:py-8 text-white font-primary">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="text-lg font-semibold font-secondary">
-          <span className="text-[#10B981]">Shadow</span>Code
+        <div className="flex items-center gap-3 text-lg font-semibold font-secondary">
+          <img src={Logo} alt="" className="h-9 w-9 shrink-0" />
+          <span>
+            <span className="text-[#10B981]">Shadow</span>Code
+          </span>
+        </div>
+        <div className="fixed inset-0 z-0 w-full h-full min-h-screen pointer-events-none">
+          <ParticlesBackground />
         </div>
 
         <button
+          onClick={() => navigate("/conversion")}
           disabled={!convertEnabled}
           className={`px-8 py-2.5 rounded-md text-sm font-secondary transition self-start sm:self-auto ${
             convertEnabled
@@ -76,11 +85,7 @@ export default function ConvertFiles() {
       </div>
 
       <div className="mt-6 flex flex-col sm:flex-row gap-4 rounded-xl border border-[#10B981]/30 bg-gradient-to-r from-[#0B1227] to-[#060C1E] p-5 sm:p-6">
-        <img
-          src={ConvertFilesIcon}
-          alt=""
-          className="h-10 w-10 shrink-0"
-        />
+        <img src={ConvertFilesIcon} alt="" className="h-10 w-10 shrink-0" />
 
         <div className="flex-1">
           <h3 className="text-sm font-semibold text-white font-secondary">
@@ -88,9 +93,9 @@ export default function ConvertFiles() {
           </h3>
 
           <p className="mt-1 text-sm text-gray-400 leading-relaxed break-words">
-            These files have no risky dependencies and can be safely converted.
-            Lorem ipsum lorem ipsum. These files have no risky dependencies and
-            can be safely converted. Lorem ipsum lorem ipsum.
+            These files have no risky dependencies and are safe to convert. They
+            can be migrated automatically without affecting application
+            behavior.
           </p>
         </div>
       </div>
@@ -109,11 +114,7 @@ export default function ConvertFiles() {
               <div>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-start gap-3 min-w-0">
-                    <img
-                      src={FileIcon}
-                      alt=""
-                      className="h-8 w-8 shrink-0"
-                    />
+                    <img src={FileIcon} alt="" className="h-8 w-8 shrink-0" />
 
                     <span className="text-sm font-medium break-words leading-snug">
                       {fileName}

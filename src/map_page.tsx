@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import ParticlesBackground from "./components/particle_background";
-
-/* ===================== TYPES ===================== */
+import { useNavigate } from "react-router-dom";
+import SearchIcon from "./assets/search.svg";
+import Logo from "./assets/logo.svg";
 
 interface FileNode {
   nodeId: string;
@@ -46,8 +47,6 @@ interface GraphNode extends d3.SimulationNodeDatum {
   recommendations: string[];
 }
 
-/* ===================== COMPONENT ===================== */
-
 const InteractiveGraph: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -61,8 +60,7 @@ const InteractiveGraph: React.FC = () => {
     y: number;
     metrics: GraphNode["metrics"];
   } | null>(null);
-
-  /* ===================== LOAD DATA ===================== */
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadData = async () => {
@@ -99,12 +97,8 @@ const InteractiveGraph: React.FC = () => {
     loadData();
   }, []);
 
-  /* ===================== COLOR ===================== */
-
   const nodeColor = (c: string) =>
     c === "RED" ? "#EF4444" : c === "YELLOW" ? "#F59E0B" : "#10B981";
-
-  /* ===================== D3 GRAPH ===================== */
 
   useEffect(() => {
     if (!svgRef.current || isLoading) return;
@@ -124,7 +118,7 @@ const InteractiveGraph: React.FC = () => {
       d3
         .zoom<SVGSVGElement, unknown>()
         .scaleExtent([0.5, 3])
-        .on("zoom", (e) => g.attr("transform", e.transform)),
+        .on("zoom", (e) => g.attr("transform", e.transform))
     );
 
     const simulation = d3
@@ -134,7 +128,7 @@ const InteractiveGraph: React.FC = () => {
         d3
           .forceLink(links)
           .id((d: any) => d.id)
-          .distance(140),
+          .distance(140)
       )
       .force("charge", d3.forceManyBody().strength(-450))
       .force("center", d3.forceCenter(width / 2, height / 2))
@@ -171,7 +165,7 @@ const InteractiveGraph: React.FC = () => {
             if (!e.active) simulation.alphaTarget(0);
             e.subject.fx = null;
             e.subject.fy = null;
-          }),
+          })
       );
 
     node
@@ -195,17 +189,17 @@ const InteractiveGraph: React.FC = () => {
       .on("mouseover", function (event: any, d: any) {
         const nodeId = d.id;
         link.attr("stroke-opacity", (l: any) =>
-          l.source.id === nodeId || l.target.id === nodeId ? 1 : 0.12,
+          l.source.id === nodeId || l.target.id === nodeId ? 1 : 0.12
         );
         node.style("opacity", (n: any) =>
           n.id === nodeId ||
           links.some(
             (ln: { source: string; target: string }) =>
               (ln.source === nodeId && ln.target === n.id) ||
-              (ln.target === nodeId && ln.source === n.id),
+              (ln.target === nodeId && ln.source === n.id)
           )
             ? 1
-            : 0.25,
+            : 0.25
         );
         setTooltip({
           x: event.clientX,
@@ -232,8 +226,6 @@ const InteractiveGraph: React.FC = () => {
     });
   }, [nodes, links, isLoading]);
 
-  /* ===================== UI ===================== */
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#060C1E] flex items-center justify-center text-white">
@@ -248,12 +240,20 @@ const InteractiveGraph: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#060C1E] flex text-white relative">
       <ParticlesBackground />
-      {/* SIDEBAR */}
       <aside className="w-[280px] border-r border-white/10 bg-gradient-to-b from-[#0B1227] to-[#060C1E] p-6">
-        <h1 className="text-xl font-bold text-[#10B981]">Risk Analysis Map</h1>
-        <p className="text-xs text-gray-400 mb-8">
-          github.com/username/repository
-        </p>
+        <div className="mb-8">
+          <div className="flex items-center gap-3">
+            <img src={Logo} alt="" className="h-9 w-9" />
+
+            <h1 className="text-xl font-secondary font-semibold">
+              Risk <span className="text-[#10B981]">Analysis Map</span>
+            </h1>
+          </div>
+
+          <p className="mt-1 text-sm text-gray-400 font-primary">
+            github.com/username/repository
+          </p>
+        </div>
 
         <div className="space-y-3 text-sm mb-8">
           <div className="flex items-center gap-3">
@@ -279,22 +279,26 @@ const InteractiveGraph: React.FC = () => {
         </div>
       </aside>
 
-      {/* MAIN */}
       <main className="flex-1 relative">
-        {/* SEARCH */}
         <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 lg:w-[700px] md:w-[450px] sm:w-[300px]">
-          <input
-            placeholder="Search files"
-            className="w-full rounded-xl bg-[#0B1227]/90 border border-white/10 px-10 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
-          />
+          <div className="relative">
+            <img
+              src={SearchIcon}
+              alt=""
+              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-70"
+            />
+
+            <input
+              placeholder="Search files"
+              className="w-full rounded-xl bg-[#0B1227]/90 border border-white/10 pl-10 pr-4 py-3 text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#10B981]"
+            />
+          </div>
         </div>
 
-        {/* GRAPH */}
         <div className="h-full flex items-center justify-center">
           <svg ref={svgRef} className="w-full h-[600px]" />
         </div>
 
-        {/* NODE METRICS TOOLTIP */}
         {tooltip && (
           <div
             className="fixed z-20 pointer-events-none rounded-lg border border-white/20 bg-[#0B1227]/95 px-4 py-3 text-sm shadow-xl backdrop-blur"
@@ -328,9 +332,11 @@ const InteractiveGraph: React.FC = () => {
           </div>
         )}
 
-        {/* CTA */}
         <div className="absolute bottom-6 right-6">
-          <button className="px-6 py-3 rounded-xl bg-[#10B981] text-black font-semibold hover:bg-[#0ea472] transition">
+          <button
+            onClick={() => navigate("/convertfiles")}
+            className="px-6 py-3 rounded-xl bg-[#10B981] text-black font-semibold hover:bg-[#0ea472] transition"
+          >
             View Safe Files
           </button>
         </div>

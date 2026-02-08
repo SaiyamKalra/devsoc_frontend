@@ -1,4 +1,4 @@
-import HomeImage from "../src/assets/home_page_image.png";
+import HomeImage from "../src/assets/logo.svg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ParticlesBackground from "./components/particle_background";
@@ -20,16 +20,13 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#060C1E] overflow-hidden">
       {" "}
-      {/* ✅ Removed relative */}
-      {/* Particles - full viewport with explicit size so canvas renders */}
       <div className="fixed inset-0 z-0 w-full h-full min-h-screen">
         <ParticlesBackground />
       </div>
-      {/* Content */}
       <div className="relative z-10">
         <div className="flex justify-center">
           <img
-            className="mt-[50px] lg:h-[250px] sm:h-[120px]"
+            className="mt-[50px] lg:h-[180px] sm:h-[100px]"
             src={HomeImage}
             alt="Home"
           />
@@ -41,8 +38,8 @@ export default function HomePage() {
         </div>
 
         <div className="flex justify-center">
-          <h4 className="md:text-lg lg:text-xl text-white">
-            Lorum Ipsum Lorum Ipsum Lorum Ipsum Lorum Ipsum
+          <h4 className="mt-4 md:text-lg lg:text-xl text-white">
+            System-Aware Legacy Code Migration
           </h4>
         </div>
 

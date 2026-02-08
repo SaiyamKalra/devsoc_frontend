@@ -5,7 +5,12 @@ export default {
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        secondary: ["Days One", "sans-serif"],
+        primary: ["Poppins", "sans-serif"],
+      },
+    },
   },
   plugins: [],
 };

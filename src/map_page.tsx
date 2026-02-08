@@ -265,6 +265,9 @@ const InteractiveGraph: React.FC = () => {
           <div className="flex items-center gap-3">
             <span className="w-3 h-3 rounded-full bg-[#EF4444]" /> Risky
           </div>
+           <div className="flex items-center gap-3">
+            <span className="w-3 h-3 rounded-full bg-[#3473C5]" /> Already Converted
+          </div>
         </div>
 
         <div className="text-sm space-y-2">
@@ -335,7 +338,7 @@ const InteractiveGraph: React.FC = () => {
         <div className="absolute bottom-6 right-6">
           <button
             onClick={() => navigate("/convertfiles")}
-            className="px-6 py-3 rounded-xl bg-[#10B981] text-black font-semibold hover:bg-[#0ea472] transition"
+            className="px-6 py-3 rounded-xl bg-[#10B981] text-black font-secondary hover:bg-[#0ea472] transition"
           >
             View Safe Files
           </button>
